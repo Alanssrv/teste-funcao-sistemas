@@ -1,5 +1,8 @@
 ﻿
 $(document).ready(function () {
+    var cpf = $("#CPF");
+    cpf.mask('000.000.000-00');
+
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -10,6 +13,7 @@ $(document).ready(function () {
                 "CEP": $(this).find("#CEP").val(),
                 "Email": $(this).find("#Email").val(),
                 "Sobrenome": $(this).find("#Sobrenome").val(),
+                "CPF": $(this).find("#CPF").val().replace(/[-.]/g, ''),
                 "Nacionalidade": $(this).find("#Nacionalidade").val(),
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),

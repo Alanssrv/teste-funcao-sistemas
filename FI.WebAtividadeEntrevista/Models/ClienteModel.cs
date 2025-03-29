@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using FI.WebAtividadeEntrevista.Validators;
 
 namespace WebAtividadeEntrevista.Models
 {
@@ -61,6 +62,14 @@ namespace WebAtividadeEntrevista.Models
         /// </summary>
         [Required]
         public string Sobrenome { get; set; }
+
+        /// <summary>
+        /// CPF
+        /// </summary>
+        [Required]
+        [StringLength(11)]
+        [CPF]
+        public string CPF { get; set; }
 
         /// <summary>
         /// Telefone
