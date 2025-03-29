@@ -25,8 +25,9 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Incluir(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-            
+            BoCliente boCliente = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -38,13 +39,13 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                if (bo.VerificarExistencia(model.CPF))
+                if (boCliente.VerificarExistencia(model.CPF))
                 {
                     Response.StatusCode = 400;
                     return Json("CPF já cadastrado");
                 }
 
-                model.Id = bo.Incluir(new Cliente()
+                model.Id = boCliente.Incluir(new Cliente()
                 {                    
                     CEP = model.CEP,
                     Cidade = model.Cidade,
@@ -58,7 +59,16 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-           
+                foreach (var beneficiario in model.Beneficiarios)
+                {
+                    boBeneficiario.Incluir(new Beneficiario()
+                    {
+                        CPF = beneficiario.CPF,
+                        IdCliente = model.Id,
+                        Nome = beneficiario.Nome
+                    });
+                }
+
                 return Json("Cadastro efetuado com sucesso");
             }
         }

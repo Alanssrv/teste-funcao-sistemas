@@ -18,23 +18,23 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "Beneficiarios": obterBeneficiarios()
             },
             error:
-            function (r) {
-                if (r.status == 400)
-                    ModalDialog("Ocorreu um erro", r.responseJSON);
-                else if (r.status == 500)
-                    ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
-            },
+                function (r) {
+                    if (r.status == 400)
+                        ModalDialog("Ocorreu um erro", r.responseJSON);
+                    else if (r.status == 500)
+                        ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
+                },
             success:
-            function (r) {
-                ModalDialog("Sucesso!", r)
-                $("#formCadastro")[0].reset();
-            }
+                function (r) {
+                    ModalDialog("Sucesso!", r)
+                    $("#formCadastro")[0].reset();
+                }
         });
     })
-    
 })
 
 function ModalDialog(titulo, texto) {
@@ -59,4 +59,20 @@ function ModalDialog(titulo, texto) {
 
     $('body').append(texto);
     $('#' + random).modal('show');
+}
+
+function obterBeneficiarios() {
+    const beneficiarios = [];
+
+    $('#beneficiariosTabela tbody tr').each(function () {
+        const nome = $(this).find('td:nth-child(1)').text();
+        const cpf = $(this).find('td:nth-child(2)').text().replace(/[-.]/g, '');
+
+        beneficiarios.push({
+            nome: nome,
+            cpf: cpf
+        });
+    });
+
+    return beneficiarios;
 }
