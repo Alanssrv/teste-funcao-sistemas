@@ -6,7 +6,7 @@ namespace FI.WebAtividadeEntrevista.Utils
     {
         public static bool ValidarCPF(string cpf)
         {
-            if (string.IsNullOrEmpty(cpf))
+            if (string.IsNullOrEmpty(cpf) || cpf.Length != 11)
                 return false;
 
             Regex digitosIguais = new Regex(@"^(\d)\1{10}$");
