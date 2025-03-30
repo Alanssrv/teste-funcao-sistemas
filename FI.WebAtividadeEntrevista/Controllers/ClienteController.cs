@@ -115,7 +115,7 @@ namespace WebAtividadeEntrevista.Controllers
                 List<Beneficiario> beneficiariosExistentes = boBeneficiario.ListarPorIdCliente(model.Id);
                 foreach (var beneficiario in beneficiariosExistentes)
                 {
-                    var beneficiarioSelecionado = model.Beneficiarios.Where(ben => ben.CPF == beneficiario.CPF).FirstOrDefault();
+                    var beneficiarioSelecionado = model.Beneficiarios?.Where(ben => ben.CPF == beneficiario.CPF).FirstOrDefault();
                     if (beneficiarioSelecionado != null)
                     {
                         boBeneficiario.Alterar(new Beneficiario()
@@ -130,14 +130,17 @@ namespace WebAtividadeEntrevista.Controllers
                         boBeneficiario.Excluir(beneficiario.Id);
                 }
 
-                foreach (var item in model.Beneficiarios.Where(ben => ben.Id == 0))
+                if (model.Beneficiarios != null)
                 {
-                    boBeneficiario.Incluir(new Beneficiario()
+                    foreach (var item in model.Beneficiarios.Where(ben => ben.Id == 0))
                     {
-                        CPF = item.CPF,
-                        IdCliente = model.Id,
-                        Nome = item.Nome
-                    });
+                        boBeneficiario.Incluir(new Beneficiario()
+                        {
+                            CPF = item.CPF,
+                            IdCliente = model.Id,
+                            Nome = item.Nome
+                        });
+                    }
                 }
                 
                 return Json("Cadastro alterado com sucesso");

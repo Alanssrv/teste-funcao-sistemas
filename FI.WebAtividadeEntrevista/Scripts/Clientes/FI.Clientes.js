@@ -65,8 +65,8 @@ function obterBeneficiarios() {
     const beneficiarios = [];
 
     $('#beneficiariosTabela tbody tr').each(function () {
-        const nome = $(this).find('td:nth-child(1)').text();
-        const cpf = $(this).find('td:nth-child(2)').text().replace(/[-.]/g, '');
+        const cpf = $(this).find('td:nth-child(1)').text().replace(/[-.]/g, '');
+        const nome = $(this).find('td:nth-child(2)').text();
 
         beneficiarios.push({
             nome: nome,
