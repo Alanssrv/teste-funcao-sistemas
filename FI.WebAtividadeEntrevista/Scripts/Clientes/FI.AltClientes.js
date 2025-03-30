@@ -62,6 +62,11 @@ $(document).ready(function () {
         e.preventDefault();
         var nome = $('#NomeBeneficiario').val();
         var cpf = $('#CPFBeneficiario').val().replace(/[-.]/g, '');
+        
+        if (beneficiarios.find(ben => ben.cpf === cpf)) {
+            alert('CPF de beneficiário já cadastrado');
+            return;
+        }
 
         if (beneficiarioIndex === -1) {
             beneficiarios.push({ nome, cpf });
@@ -157,7 +162,7 @@ function removerBeneficiario(index) {
 
 function alterarBeneficiario(index) {
     $('#NomeBeneficiario').val(beneficiarios[index].nome);
-    $('#CPFBeneficiario').val(beneficiarios[index].cpf);
+    $('#CPFBeneficiario').val(aplicarMascaraCPF(beneficiarios[index].cpf));
     alterarBeneficiarioId = beneficiarios[index].id;
     removerBeneficiario(index);
 

@@ -113,21 +113,18 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-                foreach (var beneficiario in model.Beneficiarios)
-                {
-                }
-
                 List<Beneficiario> beneficiariosExistentes = boBeneficiario.ListarPorIdCliente(model.Id);
                 foreach (var beneficiario in beneficiariosExistentes)
                 {
-                    if (model.Beneficiarios.Any(ben => ben.CPF == beneficiario.CPF))
+                    var beneficiarioSelecionado = model.Beneficiarios.Where(ben => ben.CPF == beneficiario.CPF).FirstOrDefault();
+                    if (beneficiarioSelecionado != null)
                     {
                         boBeneficiario.Alterar(new Beneficiario()
                         {
                             Id = beneficiario.Id,
                             CPF = beneficiario.CPF,
                             IdCliente = model.Id,
-                            Nome = beneficiario.Nome
+                            Nome = beneficiarioSelecionado.Nome
                         });
                     }
                     else
