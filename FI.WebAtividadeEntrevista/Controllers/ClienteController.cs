@@ -1,12 +1,11 @@
-﻿using FI.AtividadeEntrevista.BLL;
-using WebAtividadeEntrevista.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using FI.AtividadeEntrevista.DML;
 using System.Web.UI.WebControls;
+using FI.AtividadeEntrevista.BLL;
+using FI.AtividadeEntrevista.DML;
+using WebAtividadeEntrevista.Models;
 
 namespace WebAtividadeEntrevista.Controllers
 {
