@@ -9,6 +9,11 @@ $(document).ready(function (e) {
         var nomeBeneficiario = $('#NomeBeneficiario').val();
         var cpfBeneficiario = $('#CPFBeneficiario').val();
 
+        if (beneficiarios.find(ben => ben.cpfBeneficiario === cpfBeneficiario)) {
+            alert('CPF de beneficiário já cadastrado');
+            return;
+        }
+
         beneficiarios.push({ nomeBeneficiario, cpfBeneficiario });
         atualizarTabela(beneficiarios);
 
@@ -24,10 +29,10 @@ $(document).ready(function (e) {
             const linha = document.createElement("tr");
 
             const colunaNome = document.createElement("td");
-            colunaNome.innerText = beneficiario.nomeBeneficiario;
+            colunaNome.innerText = beneficiario.cpfBeneficiario;
 
             const colunaCPF = document.createElement("td");
-            colunaCPF.innerText = beneficiario.cpfBeneficiario;
+            colunaCPF.innerText = beneficiario.nomeBeneficiario;
 
             const colunaAcoes = document.createElement("td");
 
