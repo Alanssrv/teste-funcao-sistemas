@@ -1,5 +1,4 @@
 $(document).ready(function (e) {
-    var beneficiarioIndex = -1;
     var beneficiarios = [];
 
     var cpf = $("#CPFBeneficiario");
@@ -10,12 +9,8 @@ $(document).ready(function (e) {
         var nomeBeneficiario = $('#NomeBeneficiario').val();
         var cpfBeneficiario = $('#CPFBeneficiario').val();
 
-        if (beneficiarioIndex === -1) {
-            beneficiarios.push({ nomeBeneficiario, cpfBeneficiario });
-            atualizarTabela(beneficiarios);
-        } else {
-            beneficiarios[beneficiarioIndex] = { nomeBeneficiario, cpfBeneficiario }
-        }
+        beneficiarios.push({ nomeBeneficiario, cpfBeneficiario });
+        atualizarTabela(beneficiarios);
 
         $('#NomeBeneficiario').val('');
         $('#CPFBeneficiario').val('');
@@ -65,7 +60,5 @@ $(document).ready(function (e) {
         $('#NomeBeneficiario').val(beneficiarios[index].nomeBeneficiario);
         $('#CPFBeneficiario').val(beneficiarios[index].cpfBeneficiario);
         removerBeneficiario(index);
-
-        beneficiarioIndex = index;
     }
 })

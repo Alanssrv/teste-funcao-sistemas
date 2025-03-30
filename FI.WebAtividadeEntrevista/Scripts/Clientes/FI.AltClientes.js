@@ -1,6 +1,12 @@
-﻿
+﻿var beneficiarios = [];
+var beneficiarioIndex = -1;
+var alterarBeneficiarioId = -1;
+
 $(document).ready(function () {
     var cpf = $("#CPF");
+    cpf.mask('000.000.000-00');
+
+    var cpf = $("#CPFBeneficiario");
     cpf.mask('000.000.000-00');
 
     if (obj) {
@@ -14,6 +20,7 @@ $(document).ready(function () {
         $('#formCadastro #Cidade').val(obj.Cidade);
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
+        atualizarTabela(alterarCamposBeneficiario(obj.Beneficiarios));
     }
 
     $('#formCadastro').submit(function (e) {
@@ -32,7 +39,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "Beneficiarios": beneficiarios
             },
             error:
             function (r) {
@@ -49,7 +57,24 @@ $(document).ready(function () {
             }
         });
     })
-    
+
+    $('#formIncluirBeneficiario').submit(function (e) {
+        e.preventDefault();
+        var nome = $('#NomeBeneficiario').val();
+        var cpf = $('#CPFBeneficiario').val().replace(/[-.]/g, '');
+
+        if (beneficiarioIndex === -1) {
+            beneficiarios.push({ nome, cpf });
+        } else {
+            beneficiarios.push({ nome, cpf, id: alterarBeneficiarioId });
+            beneficiarioIndex = -1;
+            alterarBeneficiarioId = -1;
+        }
+        atualizarTabela(beneficiarios);
+
+        $('#NomeBeneficiario').val('');
+        $('#CPFBeneficiario').val('');
+    })
 })
 
 function ModalDialog(titulo, texto) {
@@ -77,3 +102,64 @@ function ModalDialog(titulo, texto) {
 }
 
 const aplicarMascaraCPF = cpf => cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+
+function alterarCamposBeneficiario(beneficiarios) {
+    var novaListaBeneficiarios = [];
+
+    beneficiarios.forEach(beneficiario => {
+        novaListaBeneficiarios.push({ nome: beneficiario.Nome, cpf: beneficiario.CPF, id: beneficiario.Id, idCliente: beneficiario.IdCliente })
+    });
+
+    return novaListaBeneficiarios;
+}
+
+function atualizarTabela(lista) {
+    beneficiarios = lista;
+    const tabelaBody = document.querySelector("#beneficiariosTabela tbody");
+    tabelaBody.innerHTML = "";
+
+    lista.forEach((beneficiario, index) => {
+        const linha = document.createElement("tr");
+
+        const colunaNome = document.createElement("td");
+        colunaNome.innerText = aplicarMascaraCPF(beneficiario.cpf);
+
+        const colunaCPF = document.createElement("td");
+        colunaCPF.innerText = beneficiario.nome;
+
+        const colunaAcoes = document.createElement("td");
+
+        const botaoAlterar = document.createElement("button");
+        botaoAlterar.textContent = "Alterar";
+        botaoAlterar.classList.add("btn", "btn-primary");
+        botaoAlterar.onclick = () => alterarBeneficiario(index);
+
+        const botaoRemover = document.createElement("button");
+        botaoRemover.textContent = "Remover";
+        botaoRemover.classList.add("btn", "btn-primary");
+        botaoRemover.onclick = () => removerBeneficiario(index);
+
+        colunaAcoes.appendChild(botaoAlterar);
+        colunaAcoes.appendChild(botaoRemover);
+
+        linha.appendChild(colunaNome);
+        linha.appendChild(colunaCPF);
+        linha.appendChild(colunaAcoes);
+
+        tabelaBody.appendChild(linha);
+    });
+}
+
+function removerBeneficiario(index) {
+    beneficiarios.splice(index, 1);
+    atualizarTabela(beneficiarios);
+}
+
+function alterarBeneficiario(index) {
+    $('#NomeBeneficiario').val(beneficiarios[index].nome);
+    $('#CPFBeneficiario').val(beneficiarios[index].cpf);
+    alterarBeneficiarioId = beneficiarios[index].id;
+    removerBeneficiario(index);
+
+    beneficiarioIndex = index;
+}
